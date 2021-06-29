@@ -10,12 +10,15 @@ class Record:
         else:
             self.date = dt.datetime.strptime(date, '%d.%m.%Y').date()
 
+
 class Calculator():
     def __init__(self, limit):
-        self.limit = limit        
+        self.limit = limit
         self.records = []
+
     def add_record(self, rec):
-        self.records.append(rec)          
+        self.records.append(rec)
+
     def get_today_stats(self):
         total = 0
         now = dt.date.today()
@@ -24,7 +27,8 @@ class Calculator():
             if now == moment:
                 total += record.amount
         return total
-    def get_week_stats(self):  
+
+    def get_week_stats(self):
         total = 0
         now = dt.date.today()
         week = (dt.date.today() - dt.timedelta(days=7))
@@ -34,21 +38,25 @@ class Calculator():
                 total += record.amount
         return total
 
+
 class CaloriesCalculator(Calculator):
     def __init__(self, limit):
         super().__init__(limit)
+
     def get_calories_remained(self):
         today_remained: float = self.limit - self.get_today_stats()
         if today_remained > 0:
-            return (f'Сегодня можно съесть что-нибудь ещё, ' 
+            return (f'Сегодня можно съесть что-нибудь ещё, '
                     f'но с общей калорийностью не более {today_remained} кКал')
         else:
             return 'Хватит есть!'
+
 
 class CashCalculator(Calculator):
     USD_RATE: float = 72.0
     EURO_RATE: float = 86.0
     RUB_RATE: float = 1.0
+
     def get_today_cash_remained(self, currency):
         exchange_rate = {
             'rub': ('руб', self.RUB_RATE),
@@ -66,4 +74,3 @@ class CashCalculator(Calculator):
         else:
             return ('Денег нет, держись: твой долг - '
                     f'{abs(cash_remained)} {exchange_rate[currency][0]}')
-
