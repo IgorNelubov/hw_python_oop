@@ -46,7 +46,7 @@ class CaloriesCalculator(Calculator):
     def get_calories_remained(self):
         today_remained: float = self.limit - self.get_today_stats()
         if today_remained > 0:
-            return (f'Сегодня можно съесть что-нибудь ещё, '
+            return ('Сегодня можно съесть что-нибудь ещё, '
                     f'но с общей калорийностью не более {today_remained} кКал')
         else:
             return 'Хватит есть!'
@@ -66,7 +66,7 @@ class CashCalculator(Calculator):
             raise ValueError
         today_remained: float = self.limit - self.get_today_stats()
         if today_remained == 0:
-            return f'Денег нет, держись'
+            return 'Денег нет, держись'
         cash_remained = round(today_remained / exchange_rate[currency][1], 2)
         if today_remained > 0:
             return ('На сегодня осталось '
