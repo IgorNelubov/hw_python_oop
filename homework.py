@@ -12,7 +12,6 @@ class Record:
 
 
 class Calculator():
-
     def __init__(self, limit):
         self.limit = limit
         self.records = []
@@ -46,9 +45,10 @@ class Calculator():
 
 class CaloriesCalculator(Calculator):
     def get_calories_remained(self):
-        if self.remain() > 0:
+        remain = self.remain()
+        if remain > 0:
             return ('Сегодня можно съесть что-нибудь ещё, '
-                    f'но с общей калорийностью не более {self.remain()} кКал')
+                    f'но с общей калорийностью не более {remain} кКал')
         else:
             return 'Хватит есть!'
 
@@ -61,16 +61,18 @@ class CashCalculator(Calculator):
     def get_today_cash_remained(self, currency):
         remain = self.remain()
         exchange_rate = {
-            'rub': (round(remain, 2), 'руб'),
-            'usd': (round(remain / self.USD_RATE, 2), 'USD'),
-            'eur': (round(remain / self.EURO_RATE, 2), 'Euro')}
+            'rub': (self.RUB_RATE, 'руб'),
+            'usd': (self.USD_RATE, 'USD'),
+            'eur': (self.EURO_RATE, 'Euro')}
         if currency not in exchange_rate:
             raise ValueError
-        remain, currency = exchange_rate[currency]
         if remain == 0:
             return 'Денег нет, держись'
+        remained, exchange = (round(remain / exchange_rate[currency][0], 2),
+                              exchange_rate[currency][1])
         if remain > 0:
-            return f'На сегодня осталось {remain} {currency}'
+            return f'На сегодня осталось {remained} {exchange}'
         else:
+            remained = abs(remained)
             return ('Денег нет, держись: твой долг - '
-                    f'{abs(remain)} {currency}')
+                    f'{remained} {exchange}')
